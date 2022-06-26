@@ -9,13 +9,13 @@ router.get("/", async (req, res) => {
     res.json({ message: "Tickets", tickets });
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res, next) => {
     try {
         const id = req.params.id;
         const ticket = await service.findOneByPk(id);
         res.json({ ticket });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        next(error);
     }
 });
 
@@ -28,14 +28,14 @@ router.post("/", async (req, res) => {
     });
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", async (req, res, next) => {
     try {
         const id = req.params.id;
         const body = req.body;
         const ticket = await service.update(id, body);
         res.json({ message: "updated", id, ticket });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        next(error);
     }
 });
 

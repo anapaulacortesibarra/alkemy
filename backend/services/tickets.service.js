@@ -1,4 +1,5 @@
 const { v4: uuid } = require("uuid");
+const boom = require("@hapi/boom");
 
 class TicketsService {
     constructor() {
@@ -12,7 +13,6 @@ class TicketsService {
             this.tickets.push({
                 id: uuid(),
                 title: `Ticket ${i}`,
-                description: `Ticket ${i} description`,
                 price: i,
                 date: new Date(),
                 type: "ticket",
@@ -37,7 +37,7 @@ class TicketsService {
     async findOneByPk(id) {
         const ticket = this.tickets.find((ticket) => ticket.id === id);
         if (!ticket) {
-            throw new Error("Ticket not found");
+            throw boom.notFound("Ticket not found");
         }
         return ticket;
     }
@@ -45,9 +45,13 @@ class TicketsService {
     async update(id, changes) {
         const index = this.tickets.findIndex((ticket) => ticket.id === id);
         if (index === -1) {
-            throw new Error("Ticket not found");
+            throw boom.notFound("Ticket not found");
         }
         const ticket = this.tickets[index];
+        if (changes.type) {
+            throw boom.conflict("Ticket type cannot be changed");
+        }
+
         this.tickets[index] = {
             ...ticket,
             ...changes,
@@ -58,7 +62,7 @@ class TicketsService {
     async delete(id) {
         const index = this.tickets.findIndex((ticket) => ticket.id === id);
         if (index === -1) {
-            throw new Error("Ticket not found");
+            throw boom.notFound("Ticket not found");
         }
         this.tickets.splice(index, 1);
 
