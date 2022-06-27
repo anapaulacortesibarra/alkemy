@@ -24,6 +24,7 @@ class TicketsService {
     async create(ticket) {
         const newTicket = {
             id: uuid(),
+            date: new Date(),
             ...ticket,
         };
         this.tickets.push(newTicket);
