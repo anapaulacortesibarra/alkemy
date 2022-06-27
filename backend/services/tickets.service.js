@@ -2,11 +2,11 @@ const { v4: uuid } = require("uuid");
 const boom = require("@hapi/boom");
 
 class TicketsService {
+    // Generate tickets in memory
     constructor() {
         this.tickets = [];
         this.generateTickets();
     }
-
     async generateTickets() {
         const limit = 100;
         for (let i = 0; i < limit; i++) {
@@ -52,7 +52,6 @@ class TicketsService {
         if (changes.type) {
             throw boom.conflict("Ticket type cannot be changed");
         }
-
         this.tickets[index] = {
             ...ticket,
             ...changes,

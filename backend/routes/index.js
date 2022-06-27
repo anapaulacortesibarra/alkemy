@@ -1,7 +1,7 @@
 const express = require("express");
 
 const ticketsRouter = require("./tickets.route");
-// const usersRouter = require('./users.route');
+// const usersRouter = require('./users.route'); TO DO - add users router
 
 const routerApi = (app) => {
     const router = express.Router();

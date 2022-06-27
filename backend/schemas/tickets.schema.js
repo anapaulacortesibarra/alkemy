@@ -1,21 +1,21 @@
 const Joi = require("joi");
 
 const id = Joi.string().uuid();
-const title = Joi.string().min(3).max(30);
-const price = Joi.number().min(0);
+const concept = Joi.string().min(3).max(30);
+const amount = Joi.number().min(0);
 const type = Joi.any().valid("income", "expense");
 const category = Joi.string().min(3).max(30);
 
 const createTicketSchema = Joi.object({
-    title: title.required(),
-    price: price.required(),
+    concept: concept.required(),
+    amount: amount.required(),
     type: type.required(),
     category: category.required(),
 });
 
 const updateTicketSchema = Joi.object({
-    title: title,
-    price: price,
+    concept: concept,
+    amount: amount,
     category: category,
 });
 

@@ -11,11 +11,17 @@ const {
 const router = express.Router();
 const service = new TicketsService();
 
+// Get all tickets
 router.get("/", async (req, res) => {
-    const tickets = await service.find();
-    res.json({ message: "Tickets", tickets });
+    try {
+        const tickets = await service.find();
+        res.json({ message: "Tickets", tickets });
+    } catch (error) {
+        next(error);
+    }
 });
 
+// Get ticket by id
 router.get(
     "/:id",
     validatorHandler(getTicketSchema, "params"),
@@ -30,19 +36,25 @@ router.get(
     }
 );
 
+// Create a new ticket
 router.post(
     "/",
     validatorHandler(createTicketSchema, "body"),
     async (req, res) => {
-        const body = req.body;
-        const ticket = await service.create(body);
-        res.status(201).json({
-            message: "Create ticket",
-            ticket,
-        });
+        try {
+            const body = req.body;
+            const ticket = await service.create(body);
+            res.status(201).json({
+                message: "Create ticket",
+                ticket,
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 );
 
+// Update a ticket
 router.patch(
     "/:id",
     validatorHandler(getTicketSchema, "params"),
@@ -59,13 +71,18 @@ router.patch(
     }
 );
 
+// Delete a ticket
 router.delete(
     "/:id",
     validatorHandler(deleteTicketSchema, "params"),
     async (req, res) => {
-        const id = req.params.id;
-        const rta = await service.delete(id);
-        res.json({ rta });
+        try {
+            const id = req.params.id;
+            const rta = await service.delete(id);
+            res.json({ rta });
+        } catch (error) {
+            next(error);
+        }
     }
 );
 
