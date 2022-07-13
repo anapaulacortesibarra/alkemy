@@ -1,31 +1,36 @@
 const { v4: uuid } = require("uuid");
 const boom = require("@hapi/boom");
 
+const sequelize = require("../libs/sequelize");
+
 class UsersService {
-    constructor() {}
+    constructor() {
+        this.users = [];
+    }
 
     async create(data) {
-      return data;
+        return data;
     }
-  
+
     async find() {
-      return [];
+        const [data] = await sequelize.query("SELECT * FROM users");
+        return data;
     }
-  
+
     async findOne(id) {
-      return { id };
+        return { id };
     }
-  
+
     async update(id, changes) {
-      return {
-        id,
-        changes,
-      };
+        return {
+            id,
+            changes,
+        };
     }
-  
+
     async delete(id) {
-      return { id };
+        return { id };
     }
-  }
+}
 
 module.exports = UsersService;
