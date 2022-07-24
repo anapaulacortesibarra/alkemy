@@ -1,35 +1,38 @@
-const { v4: uuid } = require("uuid");
 const boom = require("@hapi/boom");
 
-const sequelize = require("../libs/sequelize");
+const { models } = require("../libs/sequelize");
 
 class UsersService {
     constructor() {
-        this.users = [];
     }
 
     async create(data) {
-        return data;
+        const user = await models.User.create(data);
+        return user;        
     }
 
     async find() {
-        const [data] = await sequelize.query("SELECT * FROM users");
-        return data;
+        const result = await models.User.findAll();
+        return result;
     }
 
     async findOne(id) {
-        return { id };
+        const user = await models.User.findByPk(id);
+        if (!user) {
+            throw boom.notFound("User not found");
+        }
+        return user;
     }
 
     async update(id, changes) {
-        return {
-            id,
-            changes,
-        };
+        const user = await this.findOne(id);
+        const updatedUser = await user.update(changes);
+        return updatedUser;
     }
 
     async delete(id) {
-        return { id };
+        const user = await this.findOne(id);
+        await user.destroy();
     }
 }
 

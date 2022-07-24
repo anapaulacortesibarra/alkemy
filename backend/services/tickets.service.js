@@ -1,42 +1,23 @@
-const { v4: uuid } = require("uuid");
 const boom = require("@hapi/boom");
 
+const { models } = require("../libs/sequelize");
+
 class TicketsService {
-    // Generate tickets in memory
     constructor() {
-        this.tickets = [];
-        this.generateTickets();
-    }
-    async generateTickets() {
-        const limit = 100;
-        for (let i = 0; i < limit; i++) {
-            this.tickets.push({
-                id: uuid(),
-                title: `Ticket ${i}`,
-                price: i,
-                date: new Date(),
-                type: "ticket",
-                category: "category",
-            });
-        }
     }
 
     async create(ticket) {
-        const newTicket = {
-            id: uuid(),
-            date: new Date(),
-            ...ticket,
-        };
-        this.tickets.push(newTicket);
+        const newTicket = await models.Ticket.create(ticket)
         return newTicket;
     }
 
     async find() {
-        return this.tickets;
+        const result = await models.Ticket.findAll();
+        return result;
     }
 
-    async findOneByPk(id) {
-        const ticket = this.tickets.find((ticket) => ticket.id === id);
+    async findOne(id) {
+        const ticket = await models.Ticket.findByPk(id);
         if (!ticket) {
             throw boom.notFound("Ticket not found");
         }
@@ -44,29 +25,18 @@ class TicketsService {
     }
 
     async update(id, changes) {
-        const index = this.tickets.findIndex((ticket) => ticket.id === id);
-        if (index === -1) {
-            throw boom.notFound("Ticket not found");
-        }
-        const ticket = this.tickets[index];
+        const ticket = await this.findOne(id);
         if (changes.type) {
             throw boom.conflict("Ticket type cannot be changed");
         }
-        this.tickets[index] = {
-            ...ticket,
-            ...changes,
-        };
-        return this.tickets[index];
+        const updatedTicket = await ticket.update(changes);
+        return updatedTicket;
     }
 
     async delete(id) {
-        const index = this.tickets.findIndex((ticket) => ticket.id === id);
-        if (index === -1) {
-            throw boom.notFound("Ticket not found");
-        }
-        this.tickets.splice(index, 1);
-
-        return id;
+        const ticket = await this.findOne(id);
+        await ticket.destroy();
+        return ticket;
     }
 }
 

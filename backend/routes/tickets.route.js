@@ -12,7 +12,7 @@ const router = express.Router();
 const service = new TicketsService();
 
 // Get all tickets
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
     try {
         const tickets = await service.find();
         res.json({ message: "Tickets", tickets });
@@ -28,7 +28,7 @@ router.get(
     async (req, res, next) => {
         try {
             const id = req.params.id;
-            const ticket = await service.findOneByPk(id);
+            const ticket = await service.findOne(id);
             res.json({ ticket });
         } catch (error) {
             next(error);
@@ -40,7 +40,7 @@ router.get(
 router.post(
     "/",
     validatorHandler(createTicketSchema, "body"),
-    async (req, res) => {
+    async (req, res, next) => {
         try {
             const body = req.body;
             const ticket = await service.create(body);
@@ -75,11 +75,11 @@ router.patch(
 router.delete(
     "/:id",
     validatorHandler(deleteTicketSchema, "params"),
-    async (req, res) => {
+    async (req, res, next) => {
         try {
             const id = req.params.id;
             const rta = await service.delete(id);
-            res.json({ rta });
+            res.json({ message: `Ticket deleted` });
         } catch (error) {
             next(error);
         }
