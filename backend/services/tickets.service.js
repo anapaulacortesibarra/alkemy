@@ -3,16 +3,24 @@ const boom = require("@hapi/boom");
 const { models } = require("../libs/sequelize");
 
 class TicketsService {
-    constructor() {
-    }
+    constructor() {}
 
     async create(ticket) {
-        const newTicket = await models.Ticket.create(ticket)
+        const newTicket = await models.Ticket.create(ticket);
         return newTicket;
     }
 
     async find() {
         const result = await models.Ticket.findAll();
+        return result;
+    }
+
+    async findByType(filteredType) {
+        const result = await models.Ticket.findAll({
+            where: {
+                type: filteredType,
+            },
+        });
         return result;
     }
 

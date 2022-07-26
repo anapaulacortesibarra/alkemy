@@ -16,11 +16,6 @@ const boomErrorHandler = (err, req, res, next) => {
     }
 };
 
-// if not a boom error, return a 500 error
-const errorHandler = (err, req, res, next) => {
-    res.status(500).json({ message: err.message });
-};
-
 // ORM error handler
 const ormErrorHandler = (err, req, res, next) => {
     if (err instanceof Sequelize.ValidationError) {
@@ -32,6 +27,11 @@ const ormErrorHandler = (err, req, res, next) => {
     } else {
         next(err);
     }
+};
+
+// if not a boom error, return a 500 error
+const errorHandler = (err, req, res, next) => {
+    res.status(500).json({ message: err.message });
 };
 
 module.exports = { logErrors, errorHandler, boomErrorHandler, ormErrorHandler };

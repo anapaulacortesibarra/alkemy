@@ -21,6 +21,24 @@ router.get("/", async (req, res, next) => {
     }
 });
 
+router.get("/incomes", async (req, res, next) => {
+    try {
+        const tickets = await service.findByType("income");
+        res.json({ message: "Incomes", tickets });
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get("/expenses", async (req, res, next) => {
+    try {
+        const tickets = await service.findByType("expense");
+        res.json({ message: "Expenses", tickets });
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Get ticket by id
 router.get(
     "/:id",
