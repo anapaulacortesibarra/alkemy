@@ -11,13 +11,20 @@ export const TicketProvider = ({ children }) => {
         setTicketList([...ticketList, ticket]);
     };
 
+    const editTicket = (ticket) => {
+        const ticketIndex = ticketList.findIndex((t) => t.id === ticket.id);
+        const newTicketList = [...ticketList];
+        newTicketList[ticketIndex] = ticket;
+        setTicketList(newTicketList);
+    }
+
     const deleteTicket = (id) => {
         setTicketList(ticketList.filter((ticket) => ticket.id !== id));
     };
 
     return (
         <TicketContext.Provider
-            value={{ ticketList, setTicketList, addTicket, deleteTicket }}
+            value={{ ticketList, setTicketList, addTicket, editTicket, deleteTicket }}
         >
             {children}
         </TicketContext.Provider>

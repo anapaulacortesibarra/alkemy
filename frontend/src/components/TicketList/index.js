@@ -6,9 +6,7 @@ import TypeFilterButton from '../TypeFilterButton'
 import "./style.css";
 
 function TicketList() {
-   
     const { ticketList, setTicketList } = useContext(TicketContext);
-
     const [totalBalance, setTotalBalance] = useState(0);
     const [loading, setLoading] = useState(true);
 
@@ -47,13 +45,27 @@ function TicketList() {
         <div className="ticket-list">
             <TypeFilterButton setFilter={setFilter} />
             <h2>Ticket List</h2>
-            <table>
+            <table className="ticket-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Concept</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>User</th>
+                        <th>Delete</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
                 {filteredList.map((ticket) => (
                     <Ticket
                         key={ticket.id}
                         ticket={ticket}
                     />
                 ))}
+                </tbody>
             </table>
             <div className="total-balance">
                 <h3>Total Balance: {totalBalance}</h3>
