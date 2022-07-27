@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Ticket from "../Ticket";
+import TypeFilterButton from '../TypeFilterButton'
+
 import "./style.css";
 
 function TicketList() {
@@ -29,18 +31,18 @@ function TicketList() {
         setTotalBalance(totalBalance);
     }, [ticketList]);
 
-    const [filter, setFilter] = useState(null);
+    const [filter, setFilter] = useState('all');
     const filteredList =
-        filter === null
-            ? ticketList
-            : ticketList.filter((ticket) => ticket.type === filter);
-
+        filter === "all"
+            ? ticketList.slice(-10) 
+            : ticketList.filter((ticket) => ticket.type === filter).slice(-10);
 
     if (loading) {
         return <div>Loading...</div>;
     }
     return (
         <div className="ticket-list">
+            <TypeFilterButton setFilter={setFilter} />
             <h2>Ticket List</h2>
             <table>
                 {filteredList.map((ticket) => (
