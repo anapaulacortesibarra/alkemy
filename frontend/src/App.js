@@ -1,15 +1,14 @@
-import NavBar from "./components/NavBar";
 import TicketList from "./components/TicketList";
 import "bootstrap/dist/css/bootstrap.min.css";
-import CreateButton from "./components/CreateButton";
+import { TicketProvider } from "./context/ticketContext";
+import FormModal from "./components/FormModal";
 
 function App() {
     return (
-        <div>
-            <NavBar />
+        <TicketProvider>
             <TicketList />
-            <CreateButton />
-        </div>
+            <FormModal title="Create Ticket" />
+        </TicketProvider>
     );
 }
 

@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { TicketContext } from "../../context/ticketContext";
 import Ticket from "../Ticket";
 import TypeFilterButton from '../TypeFilterButton'
 
 import "./style.css";
 
 function TicketList() {
-    const [ticketList, setTicketList] = useState([]);
+   
+    const { ticketList, setTicketList } = useContext(TicketContext);
+
     const [totalBalance, setTotalBalance] = useState(0);
     const [loading, setLoading] = useState(true);
 
@@ -16,7 +19,7 @@ function TicketList() {
                 setTicketList(data.tickets);
                 setLoading(false);
             });
-    }, []);
+    }, [setTicketList]);
 
     //Calculate total balance
     useEffect(() => {
@@ -48,12 +51,7 @@ function TicketList() {
                 {filteredList.map((ticket) => (
                     <Ticket
                         key={ticket.id}
-                        concept={ticket.concept}
-                        amount={ticket.amount}
-                        type={ticket.type}
-                        category={ticket.category}
-                        user={ticket.user}
-                        createdAt={ticket.createdAt}
+                        ticket={ticket}
                     />
                 ))}
             </table>

@@ -1,8 +1,10 @@
 import React from "react";
+import FormModal from "../FormModal";
 import DeleteButton from "../DeleteButton";
-import EditButton from "../EditButton";
 
-function Ticket({ createdAt, concept, amount, type, category, user }) {
+function Ticket({ ticket }) {
+    const { createdAt, concept, amount, type, category, user, id } = ticket;
+
     return (
         <tr>
             <td>{createdAt}</td>
@@ -11,10 +13,15 @@ function Ticket({ createdAt, concept, amount, type, category, user }) {
             <td>{type}</td>
             <td>{category}</td>
             <td>{user}</td>
-            <td> <DeleteButton /></td>
-            <td> <EditButton /></td>
+            <td>
+                {" "}
+                <DeleteButton id={id} />
+            </td>
+            <td>
+                {" "}
+                <FormModal title="Edit Ticket" ticket={ticket} />
+            </td>
         </tr>
-        
     );
 }
 

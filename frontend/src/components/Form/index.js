@@ -1,15 +1,31 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { TicketContext } from "../../context/ticketContext";
 import { formValidation } from "./formValidation";
-import './style.css'
+import Swal from "sweetalert2";
+import "./style.css";
 
-function Form() {
+function Form({ setShow, ticket }) {
+    const { addTicket } = useContext(TicketContext);
     const [input, setInput] = useState({
         user: "usuario1",
-        concept: "",
-        amount: "",
-        type: "income",
-        category: "",
+        concept: ticket.concept,
+        amount: ticket.amount,
+        type: ticket.type,
+        category: ticket.category,
     });
+
+    useEffect(() => {
+        if (ticket) {
+            setInput({
+                user: "usuario1",
+                concept: ticket.concept,
+                amount: ticket.amount,
+                type: ticket.type,
+                category: ticket.category,
+            });
+        }
+    }, [ticket]);
+    
     const [error, setError] = useState("");
 
     const handleInputChange = (e) => {
@@ -23,18 +39,62 @@ function Form() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         // POST to API
-        const response = await fetch("http://localhost:8080/api/tickets", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(input),
-        });
+        if (ticket) {
+            const response = await fetch(
+                "http://localhost:8080/api/tickets" + ticket.id,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(input),
+                }
+            );
+            const data = await response.json();
+            if (data.error) {
+                Swal.fire({
+                    title: "Error",
+                    text: data.error,
+                    icon: "error",
+                });
+            } else {
+                Swal.fire({
+                    title: "Success",
+                    text: "Ticket updated successfully",
+                    icon: "success",
+                });
+                setShow(false);
+            }
+        } else {
+            const response = await fetch("http://localhost:8080/api/tickets", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(input),
+            });
+            const data = await response.json();
 
-        const data = await response.json();
-        console.log(data);
-        
-        
+            //Alert
+            if (data.error) {
+                Swal.fire({
+                    title: "Error",
+                    text: data.error,
+                    icon: "error",
+                });
+            } else {
+                Swal.fire({
+                    title: "Added!",
+                    text: "Ticket has been added.",
+                    icon: "success",
+                    confirmButtonText: "Cool",
+                });
+                // Add to ticketList
+                addTicket(data.ticket);
+            }
+            // Close modal
+            setShow(false);
+        }
     };
 
     return (
@@ -45,9 +105,11 @@ function Form() {
                     type="text"
                     name="concept"
                     onChange={handleInputChange}
-                    className='Form__input'
+                    className="Form__input"
                 />
-                {error && error.concept && <p className="error">{error.concept}</p>}
+                {error && error.concept && (
+                    <p className="error">{error.concept}</p>
+                )}
 
                 <br />
 
@@ -56,19 +118,21 @@ function Form() {
                     type="number"
                     name="amount"
                     onChange={handleInputChange}
-                    className='Form__input'
-
+                    className="Form__input"
                 />
-                {error && error.amount && <p className="error">{error.amount}</p>}
+                {error && error.amount && (
+                    <p className="error">{error.amount}</p>
+                )}
                 <br />
 
                 <label>Type</label>
-                <select name="type" onChange={handleInputChange}
-                    className='Form__input'
-                    >
+                <select
+                    name="type"
+                    onChange={handleInputChange}
+                    className="Form__input"
+                >
                     <option value="income">Income</option>
                     <option value="expense">Expense</option>
-
                 </select>
                 <br />
 
@@ -77,14 +141,16 @@ function Form() {
                     type="text"
                     name="category"
                     onChange={handleInputChange}
-                    className='Form__input'
-
+                    className="Form__input"
                 />
-                {error && error.category && <p className="error">{error.category}</p>}
+                {error && error.category && (
+                    <p className="error">{error.category}</p>
+                )}
                 <br />
 
-                <button type="submit"
-                className="Form__button">Add</button>
+                <button type="submit" className="Form__button">
+                    Add
+                </button>
             </form>
         </div>
     );
