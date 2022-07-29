@@ -3,7 +3,7 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "../Form";
 
-function FormModal( {title, ticket} ) {
+function FormModal( {title, variant, ticket} ) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -11,7 +11,7 @@ function FormModal( {title, ticket} ) {
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant={variant} onClick={handleShow}>
                 {title}
             </Button>
             <Modal show={show} onHide={handleClose}>

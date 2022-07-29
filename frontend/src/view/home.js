@@ -8,7 +8,7 @@ function Home() {
         <>
             <Profile />
             <TicketList />
-            <FormModal title="Create Ticket" />
+            <FormModal title="New Ticket" variant={'success'}/>
         </>
     );
 }

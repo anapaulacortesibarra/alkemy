@@ -1,9 +1,12 @@
 import React from "react";
 import FormModal from "../FormModal";
 import DeleteButton from "../DeleteButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 function Ticket({ ticket }) {
     const { createdAt, concept, amount, type, category, user, id } = ticket;
+    const icon = <FontAwesomeIcon icon={faPenToSquare} size="lg"  />;
 
     return (
         <tr>
@@ -19,7 +22,7 @@ function Ticket({ ticket }) {
             </td>
             <td>
                 {" "}
-                <FormModal title="Edit Ticket" ticket={ticket} />
+                <FormModal title={icon} variant="secondary" ticket={ticket} />
             </td>
         </tr>
     );

@@ -79,7 +79,8 @@ function TicketList() {
                 </tbody>
             </table>
             <div className="total-balance">
-                <h3>Total Balance: {totalBalance}</h3>
+                <h4>Total tickets: {ticketList.length} </h4>
+                <h3>Your balance is ${totalBalance}</h3>
             </div>
         </div>
     );
