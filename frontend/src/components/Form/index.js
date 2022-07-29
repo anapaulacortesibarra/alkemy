@@ -3,12 +3,14 @@ import { TicketContext } from "../../context/ticketContext";
 import { formValidation } from "./formValidation";
 import Swal from "sweetalert2";
 import "./style.css";
+import { AuthContext } from "../../context/authContext";
 
 function Form({ setShow, ticket }) {
     const { addTicket, editTicket } = useContext(TicketContext);
+    const { user } = useContext(AuthContext);
 
     const [input, setInput] = useState({
-        user: "usuario1",
+        user: user ? user : "usuario no registrado",
         concept: ticket ? ticket.concept : "",
         amount: ticket ? ticket.amount : "",
         type: ticket ? ticket.type : "income",
@@ -27,8 +29,9 @@ function Form({ setShow, ticket }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
         if (ticket) {
-            //Update Ticket
+            //UPDATE TICKET
             let ticketData = {
                 concept: input.concept,
                 amount: input.amount,
@@ -45,7 +48,7 @@ function Form({ setShow, ticket }) {
                 }
             );
             const data = await response.json();
-            
+
             if (data.error) {
                 Swal.fire({
                     title: "Error",
@@ -59,7 +62,7 @@ function Form({ setShow, ticket }) {
                     icon: "success",
                 });
                 //Update ticketList
-                editTicket(data.ticket)
+                editTicket(data.ticket);
                 setShow(false);
             }
         } else {

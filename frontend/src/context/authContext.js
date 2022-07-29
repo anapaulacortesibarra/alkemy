@@ -1,43 +1,60 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut,
 } from "firebase/auth";
-import auth from "../firebase-config";
+import { auth } from "../firebase/firebase-config";
 
-export const authContext = createContext();
-export const useAuth = () => {
-    const context = useContext(authContext);
-    return context;
-};
+export const AuthContext = createContext();
+
 export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const signUp = async (email, password) =>
-        await createUserWithEmailAndPassword(auth, email, password);
+    const signUp = async (email, password) => {
+        console.log("signing up");
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                setUser(userCredential.user.email);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
     const logIn = async (email, password) =>
-        await signInWithEmailAndPassword(auth, email, password);
+        signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                setUser(userCredential.user.email);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
-    const logOut = () => signOut(auth);
+    const logOut = () =>
+        signOut(auth)
+            .then(() => {
+                setUser(null);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
 
-    //para que este atento a los mov del usuario y se renderice los cambios
     useEffect(() => {
         const unsub = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser); //cambia el estado del user a current
+            setUser(currentUser.email);
             setLoading(false);
         });
 
-        return () => unsub; //desmontamos el componente y mandamos la data
+        return () => unsub;
     }, []);
 
     return (
-        <authContext.Provider value={{ signUp, logIn, logOut, user, loading }}>
+        <AuthContext.Provider value={{ signUp, logIn, logOut, user, loading }}>
             {" "}
             {children}
-        </authContext.Provider>
+        </AuthContext.Provider>
     );
 }

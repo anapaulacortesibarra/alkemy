@@ -1,13 +1,14 @@
-import TicketList from "./components/TicketList";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { TicketProvider } from "./context/ticketContext";
-import FormModal from "./components/FormModal";
+import { AuthProvider } from "./context/authContext";
+import Home from "./view/home";
 
 function App() {
     return (
         <TicketProvider>
-            <TicketList />
-            <FormModal title="Create Ticket" />
+            <AuthProvider>
+                <Home />
+            </AuthProvider>
         </TicketProvider>
     );
 }

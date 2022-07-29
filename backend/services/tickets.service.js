@@ -15,10 +15,10 @@ class TicketsService {
         return result;
     }
 
-    async findByType(filteredType) {
+    async findByUser(user) {
         const result = await models.Ticket.findAll({
             where: {
-                type: filteredType,
+                user: user,
             },
         });
         return result;

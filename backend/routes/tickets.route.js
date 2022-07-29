@@ -13,29 +13,21 @@ const service = new TicketsService();
 
 // Get all tickets
 router.get("/", async (req, res, next) => {
-    try {
-        const tickets = await service.find();
-        res.json({ message: "Tickets", tickets });
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.get("/incomes", async (req, res, next) => {
-    try {
-        const tickets = await service.findByType("income");
-        res.json({ message: "Incomes", tickets });
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.get("/expenses", async (req, res, next) => {
-    try {
-        const tickets = await service.findByType("expense");
-        res.json({ message: "Expenses", tickets });
-    } catch (error) {
-        next(error);
+    const { user } = req.query;
+    if (user) {
+        try {
+            const tickets = await service.findByUser(user);
+            res.json({ tickets });
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        try {
+            const tickets = await service.find();
+            res.json({ tickets });
+        } catch (error) {
+            next(error);
+        }
     }
 });
 

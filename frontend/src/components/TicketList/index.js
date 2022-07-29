@@ -1,23 +1,28 @@
 import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../context/authContext";
 import { TicketContext } from "../../context/ticketContext";
 import Ticket from "../Ticket";
-import TypeFilterButton from '../TypeFilterButton'
-
+import TypeFilterButton from "../TypeFilterButton";
 import "./style.css";
 
 function TicketList() {
     const { ticketList, setTicketList } = useContext(TicketContext);
+    const { user } = useContext(AuthContext);
     const [totalBalance, setTotalBalance] = useState(0);
     const [loading, setLoading] = useState(true);
 
+    // Get tickets from backend
     useEffect(() => {
-        fetch("http://localhost:8080/api/tickets")
+        const query = user
+            ? "http://localhost:8080/api/tickets?user=" + user
+            : "http://localhost:8080/api/tickets";
+        fetch(query)
             .then((response) => response.json())
             .then((data) => {
                 setTicketList(data.tickets);
                 setLoading(false);
             });
-    }, [setTicketList]);
+    }, [setTicketList, user]);
 
     //Calculate total balance
     useEffect(() => {
@@ -32,18 +37,21 @@ function TicketList() {
         setTotalBalance(totalBalance);
     }, [ticketList]);
 
-    const [filter, setFilter] = useState('all');
+    //Filter tickets by type and show only last 10
+    const [typeFilter, setTypeFilter] = useState("all");
     const filteredList =
-        filter === "all"
-            ? ticketList.slice(-10) 
-            : ticketList.filter((ticket) => ticket.type === filter).slice(-10);
+        typeFilter === "all"
+            ? ticketList.slice(-10)
+            : ticketList
+                  .filter((ticket) => ticket.type === typeFilter)
+                  .slice(-10);
 
     if (loading) {
         return <div>Loading...</div>;
     }
     return (
         <div className="ticket-list">
-            <TypeFilterButton setFilter={setFilter} />
+            <TypeFilterButton setFilter={setTypeFilter} />
             <h2>Ticket List</h2>
             <table className="ticket-table">
                 <thead>
@@ -59,12 +67,15 @@ function TicketList() {
                     </tr>
                 </thead>
                 <tbody>
-                {filteredList.map((ticket) => (
-                    <Ticket
-                        key={ticket.id}
-                        ticket={ticket}
-                    />
-                ))}
+                    {ticketList.length > 0 ? (
+                        filteredList.map((ticket) => (
+                            <Ticket key={ticket.id} ticket={ticket} />
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="8">No tickets found</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
             <div className="total-balance">
