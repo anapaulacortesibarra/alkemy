@@ -6,7 +6,7 @@ import TicketFilterButton from "../TicketFilterButton";
 import Spinner from "react-bootstrap/Spinner";
 import "./style.css";
 import { calculateBalance } from "../../helpers/calculateBalance";
-
+import {Table} from "react-bootstrap"
 function TicketList() {
     const { ticketList, setTicketList, categories, setCategories } =
         useContext(TicketContext);
@@ -18,7 +18,7 @@ function TicketList() {
     useEffect(() => {
         const query = user
             ? "http://localhost:8080/api/tickets?user=" + user
-            : "http://localhost:8080/api/tickets";
+            : "http://localhost:8080/api/tickets?user=unregistered";
 
         fetch(query)
             .then((response) => response.json())
@@ -67,6 +67,7 @@ function TicketList() {
         return <Spinner animation="grow" />;
     }
     return (
+        <div>
         <div className="ticket-list">
             <TicketFilterButton
                 ticketFilter={ticketFilter}
@@ -75,7 +76,7 @@ function TicketList() {
                 setCategories={setCategories}
             />
             <h2>Ticket List</h2>
-            <table className="ticket-table">
+            <Table className="ticket-table">
                 <thead>
                     <tr>
                         <th>Date</th>
@@ -99,8 +100,10 @@ function TicketList() {
                         </tr>
                     )}
                 </tbody>
-            </table>
-            <div className="total-balance">
+            </Table>
+           
+        </div>
+        <div className="total-balance">
                 <h4>Total tickets: {ticketList.length} </h4>
                 <h3>Your balance is ${totalBalance}</h3>
             </div>

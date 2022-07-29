@@ -7,15 +7,19 @@ import "./home.css";
 
 function Home() {
     return (
-        <Container className="flex-center">
-            <Container className="navBar">
-                <h1 className="title">Budget Manager</h1>
+        <Container>
+            <Container className="btn-Sign">
+            <Profile />
             </Container>
-                <Profile />
+        <Container className="flex-center">
+                <h1 className="title">Budget Manager</h1>
+            
             <Container className="flex-center">
                 <TicketList />
                 <FormModal title="New Ticket" variant={"success"} />
             </Container>
+        </Container>
+
         </Container>
     );
 }

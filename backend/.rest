@@ -1,0 +1,15 @@
+GET http://localhost:3000/api/tickets/
+
+###
+
+POST http://localhost:3000/api/tickets/
+Content-Type: application/json
+
+
+{
+	"user": "usuario1",
+	"concept": "ticket n6",
+	"amount": 1000,
+	"type": "income",
+	"category": "some category"
+}

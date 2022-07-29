@@ -10,7 +10,7 @@ function Form({ setShow, ticket }) {
     const { user } = useContext(AuthContext);
 
     const [input, setInput] = useState({
-        user: user ? user : "usuario no registrado",
+        user: user ? user : "unregistered",
         concept: ticket ? ticket.concept : "",
         amount: ticket ? ticket.amount : "",
         type: ticket ? ticket.type : "income",
