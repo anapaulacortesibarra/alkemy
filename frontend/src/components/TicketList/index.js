@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import { TicketContext } from "../../context/ticketContext";
 import Ticket from "../Ticket";
-import TypeFilterButton from "../TypeFilterButton";
+import TicketFilterButton from "../TicketFilterButton";
 import Spinner from "react-bootstrap/Spinner";
 import "./style.css";
 import { calculateBalance } from "../../helpers/calculateBalance";
 
 function TicketList() {
-    const { ticketList, setTicketList } = useContext(TicketContext);
+    const { ticketList, setTicketList, categories, setCategories } =
+        useContext(TicketContext);
     const { user } = useContext(AuthContext);
     const [totalBalance, setTotalBalance] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -23,9 +24,18 @@ function TicketList() {
             .then((response) => response.json())
             .then((data) => {
                 setTicketList(data.tickets);
+
+                let categories = [];
+                data.tickets.forEach((ticket) => {
+                    if (!categories.includes(ticket.category)) {
+                        categories.push(ticket.category);
+                    }
+                });
+                setCategories(categories);
+
                 setLoading(false);
             });
-    }, [setTicketList, user]);
+    }, [setTicketList, setCategories, user]);
 
     //Calculate total balance
     useEffect(() => {
@@ -58,7 +68,12 @@ function TicketList() {
     }
     return (
         <div className="ticket-list">
-            <TypeFilterButton setFilter={setTicketFilter} />
+            <TicketFilterButton
+                ticketFilter={ticketFilter}
+                setTicketFilter={setTicketFilter}
+                categories={categories}
+                setCategories={setCategories}
+            />
             <h2>Ticket List</h2>
             <table className="ticket-table">
                 <thead>

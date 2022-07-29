@@ -12,7 +12,7 @@ function AuthModal() {
     return (
         <>
             <Button variant="primary" onClick={handleShow}>
-                LogIn / SignUp
+                Log In / Sign Up
             </Button>
 
             <Modal show={show} onHide={handleClose}>

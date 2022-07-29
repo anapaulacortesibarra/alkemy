@@ -6,6 +6,7 @@ export const TicketContext = createContext();
 
 export const TicketProvider = ({ children }) => {
     const [ticketList, setTicketList] = useState([]);
+    const [categories, setCategories] = useState([]);
 
     const addTicket = (ticket) => {
         setTicketList([...ticketList, ticket]);
@@ -24,7 +25,7 @@ export const TicketProvider = ({ children }) => {
 
     return (
         <TicketContext.Provider
-            value={{ ticketList, setTicketList, addTicket, editTicket, deleteTicket }}
+            value={{ ticketList, setTicketList, addTicket, editTicket, deleteTicket, categories, setCategories }}
         >
             {children}
         </TicketContext.Provider>

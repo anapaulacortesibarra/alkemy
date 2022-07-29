@@ -4,6 +4,11 @@
     width: 100%;
     
     table-layout: fixed;
+    /*center*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 /*Table*/
