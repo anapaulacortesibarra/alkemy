@@ -3,7 +3,9 @@ import { AuthContext } from "../../context/authContext";
 import { TicketContext } from "../../context/ticketContext";
 import Ticket from "../Ticket";
 import TypeFilterButton from "../TypeFilterButton";
+import Spinner from "react-bootstrap/Spinner";
 import "./style.css";
+import { calculateBalance } from "../../helpers/calculateBalance";
 
 function TicketList() {
     const { ticketList, setTicketList } = useContext(TicketContext);
@@ -16,6 +18,7 @@ function TicketList() {
         const query = user
             ? "http://localhost:8080/api/tickets?user=" + user
             : "http://localhost:8080/api/tickets";
+
         fetch(query)
             .then((response) => response.json())
             .then((data) => {
@@ -26,32 +29,36 @@ function TicketList() {
 
     //Calculate total balance
     useEffect(() => {
-        let totalBalance = 0;
-        ticketList.forEach((ticket) => {
-            if (ticket.type === "income") {
-                totalBalance += ticket.amount;
-            } else {
-                totalBalance -= ticket.amount;
-            }
-        });
+        const totalBalance = calculateBalance(ticketList);
         setTotalBalance(totalBalance);
     }, [ticketList]);
 
-    //Filter tickets by type and show only last 10
-    const [typeFilter, setTypeFilter] = useState("all");
-    const filteredList =
-        typeFilter === "all"
-            ? ticketList.slice(-10)
-            : ticketList
-                  .filter((ticket) => ticket.type === typeFilter)
-                  .slice(-10);
+    //Filter tickets by type and cat and show only last 10
+    const [ticketFilter, setTicketFilter] = useState({
+        type: "all",
+        category: "all",
+    });
+    let filteredList = [];
+    if (ticketFilter.type === "all" && ticketFilter.category === "all") {
+        filteredList = ticketList.slice(-10);
+    } else if (ticketFilter.type !== "all" && ticketFilter.category === "all") {
+        filteredList = ticketList
+            .filter((ticket) => ticket.type === ticketFilter.type)
+            .slice(-10);
+    } else if (ticketFilter.type === "all" && ticketFilter.category !== "all") {
+        filteredList = ticketList
+            .filter((ticket) => ticket.category === ticketFilter.category)
+            .slice(-10);
+    } else {
+        filteredList = ticketList.slice(-10);
+    }
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Spinner animation="grow" />;
     }
     return (
         <div className="ticket-list">
-            <TypeFilterButton setFilter={setTypeFilter} />
+            <TypeFilterButton setFilter={setTicketFilter} />
             <h2>Ticket List</h2>
             <table className="ticket-table">
                 <thead>
