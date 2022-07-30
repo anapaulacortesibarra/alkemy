@@ -5,10 +5,9 @@ import Swal from "sweetalert2";
 import "./style.css";
 import { AuthContext } from "../../context/authContext";
 
-function Form({ setShow, ticket }) {
+function TicketForm({ setShow, ticket }) {
     const { addTicket, editTicket } = useContext(TicketContext);
     const { user } = useContext(AuthContext);
-
     const [input, setInput] = useState({
         user: user ? user : "unregistered",
         concept: ticket ? ticket.concept : "",
@@ -16,7 +15,6 @@ function Form({ setShow, ticket }) {
         type: ticket ? ticket.type : "income",
         category: ticket ? ticket.category : "",
     });
-
     const [error, setError] = useState("");
 
     const handleInputChange = (e) => {
@@ -29,7 +27,10 @@ function Form({ setShow, ticket }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        if (error) {
+            return;
+        }
+
         if (ticket) {
             //UPDATE TICKET
             let ticketData = {
@@ -156,7 +157,7 @@ function Form({ setShow, ticket }) {
                 )}
                 <br />
 
-                <button type="submit" className="Form__button">
+                <button type="submit" className="Form__button" disabled={error}>
                     {ticket ? "Edit" : "Add"}
                 </button>
             </form>
@@ -164,4 +165,4 @@ function Form({ setShow, ticket }) {
     );
 }
 
-export default Form;
+export default TicketForm;

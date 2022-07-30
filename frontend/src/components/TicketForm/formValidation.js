@@ -10,5 +10,6 @@ export const formValidation = (e) => {
     if (!amountValue.test(e.amount)) error.amount = message;
     if (!categoryValue.test(e.category)) error.category = message;
 
-    return error;
+    if (Object.keys(error).length > 0) return error;
+    else return null;
 };

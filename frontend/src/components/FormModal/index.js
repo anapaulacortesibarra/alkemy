@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import Form from "../Form";
+import TicketForm from "../TicketForm";
 
 function FormModal( {title, variant, ticket} ) {
     const [show, setShow] = useState(false);
@@ -19,7 +19,7 @@ function FormModal( {title, variant, ticket} ) {
                     <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form 
+                    <TicketForm 
                         setShow={setShow}
                         ticket={ticket}
                      />

@@ -47,14 +47,14 @@ function AuthForm() {
                         onClick={handleLogIn}
                         className="m-1"
                     >
-                        LogIn
+                         Log In
                     </Button>
                     <Button
                         variant="primary"
                         onClick={handleSignUp}
                         className="m-1"
                     >
-                        SignUp
+                        Sign Up
                     </Button>
                 </Row>
             </Container>

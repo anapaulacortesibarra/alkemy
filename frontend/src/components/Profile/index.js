@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Button from "react-bootstrap/esm/Button";
 import { AuthContext } from "../../context/authContext";
-import AuthModal from "../../view/auth";
+import AuthModal from "../Auth";
 import "./style.css";
 
 function Profile() {

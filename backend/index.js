@@ -2,9 +2,10 @@ const express = require("express");
 const cors = require("cors");
 const routerApi = require("./routes");
 const { logErrors, errorHandler, boomErrorHandler, ormErrorHandler } = require("./middlewares/error.handler");
+const { config } = require("./config/config");
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = config.port;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

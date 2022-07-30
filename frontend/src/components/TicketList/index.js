@@ -7,6 +7,8 @@ import Spinner from "react-bootstrap/Spinner";
 import "./style.css";
 import { calculateBalance } from "../../helpers/calculateBalance";
 import {Table} from "react-bootstrap"
+import { filterTickets } from "../../helpers/filterTickets";
+
 function TicketList() {
     const { ticketList, setTicketList, categories, setCategories } =
         useContext(TicketContext);
@@ -25,6 +27,7 @@ function TicketList() {
             .then((data) => {
                 setTicketList(data.tickets);
 
+                //Get categories from tickets
                 let categories = [];
                 data.tickets.forEach((ticket) => {
                     if (!categories.includes(ticket.category)) {
@@ -48,20 +51,8 @@ function TicketList() {
         type: "all",
         category: "all",
     });
-    let filteredList = [];
-    if (ticketFilter.type === "all" && ticketFilter.category === "all") {
-        filteredList = ticketList.slice(-10);
-    } else if (ticketFilter.type !== "all" && ticketFilter.category === "all") {
-        filteredList = ticketList
-            .filter((ticket) => ticket.type === ticketFilter.type)
-            .slice(-10);
-    } else if (ticketFilter.type === "all" && ticketFilter.category !== "all") {
-        filteredList = ticketList
-            .filter((ticket) => ticket.category === ticketFilter.category)
-            .slice(-10);
-    } else {
-        filteredList = ticketList.slice(-10);
-    }
+    const filteredList = filterTickets(ticketList, ticketFilter);
+    
 
     if (loading) {
         return <Spinner animation="grow" />;

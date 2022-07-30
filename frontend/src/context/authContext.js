@@ -6,6 +6,7 @@ import {
     signOut,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase-config";
+import Swal from "sweetalert2";
 
 export const AuthContext = createContext();
 
@@ -20,7 +21,11 @@ export function AuthProvider({ children }) {
                 setUser(userCredential.user.email);
             })
             .catch((error) => {
-                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: error.message,
+                    icon: "error",
+                });
             });
     };
 
@@ -30,7 +35,11 @@ export function AuthProvider({ children }) {
                 setUser(userCredential.user.email);
             })
             .catch((error) => {
-                console.log(error);
+                Swal.fire({
+                    title: "Error",
+                    text: error.message,
+                    icon: "error",
+                });
             });
 
     const logOut = () =>
