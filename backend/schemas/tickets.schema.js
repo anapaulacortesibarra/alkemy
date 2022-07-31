@@ -12,7 +12,7 @@ const createTicketSchema = Joi.object({
     concept: concept.required(),
     amount: amount.required(),
     type: type.required(),
-    category: category.required(),
+    category: category,
 });
 
 const updateTicketSchema = Joi.object({

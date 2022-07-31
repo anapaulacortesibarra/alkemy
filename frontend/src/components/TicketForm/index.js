@@ -152,9 +152,6 @@ function TicketForm({ setShow, ticket }) {
                     className="Form__input"
                     value={input.category}
                 />
-                {error && error.category && (
-                    <p className="error">{error.category}</p>
-                )}
                 <br />
 
                 <button type="submit" className="Form__button" disabled={error}>
